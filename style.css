@@ -110,12 +110,12 @@ body {
     transform: scale(1.05);
 }
 
-.features, .how-it-works, .faq, .how-to-install {
+.features, .how-it-works, .faq, .how-to-install, .contact-us {
     text-align: center;
     margin-top: 20px;
 }
 
-.features h2, .how-it-works h2, .faq h2, .how-to-install h2 {
+.features h2, .how-it-works h2, .faq h2, .how-to-install h2, .contact-us h2 {
     font-size: 36px;
     margin-bottom: 20px;
 }
@@ -147,7 +147,7 @@ body {
     margin-top: 5px;
 }
 
-.faq-list {
+.faq-list, .contact-us ul {
     text-align: left;
 }
 
@@ -223,7 +223,7 @@ ol li::before {
         font-size: 16px;
     }
 
-    .features h2, .how-it-works h2, .faq h2, .how-to-install h2 {
+    .features h2, .how-it-works h2, .faq h2, .how-to-install h2, .contact-us h2 {
         font-size: 28px;
     }
 
