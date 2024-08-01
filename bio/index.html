@@ -3,75 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Platforms</title>
+    <title>Syphic</title>
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body {
-            background: url('https://femboys.needs.rest/r/hannah-diamond-background.gif') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            display: none;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: white;
+            justify-content: center;
+            z-index: 1000;
+            font-size: 24px;
             text-align: center;
-            text-shadow: 1px 1px 2px black;
         }
-        .container {
-            background-color: rgba(0, 0, 255, 0.5);
+        .hidden {
+            display: none;
+        }
+        .rectangle {
+            background-color: rgba(13, 13, 13, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
             padding: 20px;
-            border-radius: 10px;
+            margin: 20px;
         }
-        .category {
-            margin-bottom: 20px;
+        .outline {
+            display: inline-block;
+            border: 3px solid #000;
+            border-radius: 50%;
+            padding: -2px;
         }
-        h1, h2, h3 {
-            margin: 10px 0;
-        }
-        a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .bio h2 {
-            color: green;
-        }
-        .positions h2 {
-            color: red;
-        }
-        .contact .name {
-            color: #FF55FF;
-        }
-        .positions .owner {
-            color: yellow;
-        }
-        .positions .developer {
-            color: purple;
-        }
-        .positions .highlight {
-            color: #08e8de;
+        .avatar {
+            border-radius: 50%;
+            display: block;
         }
     </style>
 </head>
-<body>
+<body style="margin: 0; background-color: #000000;">
+    <canvas id="background-canvas"></canvas>
     <div class="container">
-        <div class="category contact">
-            <h2>Contact me via Discord</h2>
-            <h2 class="name">Syphc</h2>
-        </div>
-        <div class="category bio">
-            <h2>My Actual Bio</h2>
-            <a href="https://feds.lol/fastcw">https://feds.lol/fastcw</a>
-        </div>
-        <div class="category positions">
-            <h2>My Positions</h2>
-            <h3><spam class="owner">Owner</span> - <span class="highlight">TrueShot.cc (AI Cheat)</span></h3>
-            <a href="https://trueshot.cc">Click me for discord!</a>
+        <div class="content-wrapper">
+            <div class="left-content">
+                <div class="rectangle">
+                    <div class="content">
+                        <a href="" target="_blank" class="outline">
+                            <img class="avatar" src="media/profile.png" alt="Avatar">
+                        </a>
+                        <h1 class="nickname">Syphic</h1>
+                        <div class="social-links social-links-rectangle">
+                            <a href="https://github.com/Fast-Voider" target="_blank">
+                                <img src="icons/github.svg" alt="Github">
+                            </a>
+                            <a href="https://discord.com/users/1175246930520055875" target="_blank">
+                                <img src="icons/discord.svg" alt="Discord">
+                            </a>
+                            <a href="https://twitch.tv/skxrpt" target="_blank">
+                                <img src="icons/twitch.svg" alt="Twitch">
+                            </a>
+                            <a href="https://www.youtube.com/@skxrpt" target="_blank">
+                                <img src="icons/youtube.svg" alt="YouTube">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        const canvas = document.getElementById('background-canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 500;
+        const maxConnections = 5;
+        const maxDistance = 100;
+
+        let mouse = { x: null, y: null };
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 1.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+            }
+
+            move() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                let particleA = particles[i];
+                let connections = 0;
+
+                for (let j = 0; j < particles.length; j++) {
+                    if (connections >= maxConnections) break;
+
+                    let particleB = particles[j];
+                    let dx = particleA.x - particleB.x;
+                    let dy = particleA.y - particleB.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particleA.x, particleA.y);
+                        ctx.lineTo(particleB.x, particleB.y);
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                        ctx.stroke();
+                        connections++;
+                    }
+                }
+
+                let mouseDx = particleA.x - mouse.x;
+                let mouseDy = particleA.y - mouse.y;
+                let mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+
+                if (mouseDistance < maxDistance) {
+                    ctx.beginPath();
+                    ctx.moveTo(particleA.x, particleA.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.move();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        createParticles();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createParticles();
+        });
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+    </script>
 </body>
 </html>
